@@ -17,7 +17,7 @@ export default class GoodsListElement extends Component {
   }
 
   render() {
-    const { title, weight, description, selected } = this.props.item;
+    const { item: { title, weight, description }, selected } = this.props;
     const elementClassName = selected ?
       'GoodsListElement isSelected' : 'GoodsListElement';
     return (
@@ -42,8 +42,8 @@ GoodsListElement.propTypes = {
     title: PropTypes.string,
     weight: PropTypes.string,
     description: PropTypes.string,
-    selected: PropTypes.bool,
   }),
+  selected: PropTypes.bool,
   onDelete: PropTypes.func,
   onToggle: PropTypes.func,
 };

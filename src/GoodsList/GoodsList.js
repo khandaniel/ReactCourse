@@ -11,14 +11,16 @@ export default class GoodsList extends Component {
   }
 
   render() {
-    const { goods, onElementToggle } = this.props;
+    const { goods, selectedItems, onElementToggle } = this.props;
     return (
       <div>
         {Array.isArray(goods) && goods.map( (item) => {
+          const selected = selectedItems.indexOf(item.id) >= 0;
           return (
             <GoodsListElement
               item={item}
               key={item.id}
+              selected={selected}
               onDelete={this.onDelete}
               onToggle={ onElementToggle }
             />
@@ -31,10 +33,12 @@ export default class GoodsList extends Component {
 
 GoodsList.defaultProps = {
   goods: [],
+  selectedItems: [],
 };
 
 GoodsList.propTypes = {
   goods: PropTypes.array,
+  selectedItems: PropTypes.array,
   onDelete: PropTypes.func,
   onElementToggle: PropTypes.func,
 };
