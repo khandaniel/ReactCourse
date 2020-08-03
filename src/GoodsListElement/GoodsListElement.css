@@ -1,3 +1,6 @@
+.GoodsListElement.isSelected {
+    background-color: #00c286;
+}
 .GoodsListElement {
     border-bottom: 0.5px solid black;
     margin: 0 10px 0 10px;
