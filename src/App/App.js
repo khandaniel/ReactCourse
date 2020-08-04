@@ -106,7 +106,9 @@ export default class App extends Component {
           }</div>
         </div>
         { !!selectedGoods.length && (
-          <button onClick={ this.onDeleteSelected }>{ __('Delete Selected') }</button>
+          <button onClick={ this.onDeleteSelected }>
+            { __('Delete Selected') }
+          </button>
         ) }
         <GoodsListForm onAdd={this.onAdd} categories={ categories } />
       </div>
