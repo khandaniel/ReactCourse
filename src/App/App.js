@@ -55,6 +55,21 @@ export default class App extends Component {
         };
       });
     };
+
+    this.onElementUpdate = (id, data = {}) => {
+      this.setState(({ goods, selectedGoods }) => {
+        const idx = goods.findIndex((item) => item.id === id);
+        const newGoods = [...goods];
+        newGoods[idx] = {id, ...data};
+
+        return {
+          goods: newGoods,
+          subTotal: getTotal(newGoods.filter((item) => {
+            return selectedGoods.indexOf(item.id) >= 0;
+          })),
+        };
+      });
+    };
   }
 
   render() {
@@ -67,6 +82,7 @@ export default class App extends Component {
           selectedItems={ selectedGoods }
           onDelete={this.onDelete}
           onElementToggle={ this.onElementToggle }
+          onElementUpdate={ this.onElementUpdate }
         />
         <div className="Total">
           <div>Total:</div>

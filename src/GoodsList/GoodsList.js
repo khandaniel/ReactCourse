@@ -21,6 +21,7 @@ export default class GoodsList extends Component {
               item={item}
               key={item.id}
               selected={selected}
+              onSave={ this.props.onElementUpdate }
               onDelete={this.onDelete}
               onToggle={ onElementToggle }
             />
@@ -41,4 +42,5 @@ GoodsList.propTypes = {
   selectedItems: PropTypes.array,
   onDelete: PropTypes.func,
   onElementToggle: PropTypes.func,
+  onElementUpdate: PropTypes.func,
 };
