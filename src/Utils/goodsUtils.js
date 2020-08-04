@@ -21,12 +21,18 @@ export const getTotal = (goods) => {
   }, 0);
 };
 
-export const getGoodsBySelected = (goods, selectedIds, returnSelected = true) => {
+export const getGoodsBySelected = (
+    goods,
+    selectedIds,
+    returnSelected = true,
+) => {
   return goods.filter((item) => {
-    if (returnSelected) {
-      return selectedIds.indexOf(item.id) >= 0;
-    } else {
-      return selectedIds.indexOf(item.id) === -1;
-    }
+    const idx = selectedIds.indexOf(item.id);
+    return (returnSelected) ? idx >= 0 : idx === -1;
   });
+};
+
+export const validateNumericInput = (input) => {
+
+  return !isNaN(input);
 };

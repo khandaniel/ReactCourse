@@ -3,6 +3,7 @@ import './GoodsListForm.css';
 import PropTypes from 'prop-types';
 import CategorySelect from '../CategoriesSelect/CategorySelect';
 import __ from '../Utils/translationsUtils';
+import { validateNumericInput } from '../Utils/goodsUtils';
 
 export default class GoodsListForm extends Component {
   constructor(props) {
@@ -32,6 +33,17 @@ export default class GoodsListForm extends Component {
         [target.name]: target.value,
       });
     };
+
+    this.onWeightChange = ({ target }) => {
+      const value = target.value.replace(',', '.');
+      if (!validateNumericInput(value)) {
+        return;
+      }
+
+      this.setState({
+        [target.name]: value,
+      });
+    };
   }
 
   render() {
@@ -56,7 +68,7 @@ export default class GoodsListForm extends Component {
             placeholder={ __('Weight') }
             name="weight"
             value={weight}
-            onChange={this.onInputChange}
+            onChange={this.onWeightChange}
           />
           <input
             type="text"
