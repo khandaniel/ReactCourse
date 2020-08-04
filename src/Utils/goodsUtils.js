@@ -1,7 +1,7 @@
 import {v4 as uuidv4} from 'uuid';
 
 export const newItemFromData = (data) => {
-  const weight = (data.weight) ? data.weight : 0;
+  const weight = (data.weight) ? data.weight : '0';
   return {
     id: uuidv4(),
     ...data,
