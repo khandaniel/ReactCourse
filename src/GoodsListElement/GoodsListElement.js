@@ -86,6 +86,7 @@ export default class GoodsListElement extends Component {
     const categoryColumnContent = this.state.editing ?
       <CategorySelect
         categories={ categories }
+        defaultValue={ category }
         onChange={ this.onInputChange }
       /> :
       getCategory(category, 'slug', categories).name;

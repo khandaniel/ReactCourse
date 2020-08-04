@@ -66,6 +66,7 @@ export default class App extends Component {
 
         return {
           goods: newGoods,
+          total: getTotal(newGoods),
           subTotal: getTotal(getGoodsBySelected(newGoods, selectedGoods)),
         };
       });

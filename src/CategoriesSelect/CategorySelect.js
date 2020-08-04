@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import './CategorySelect.css';
 
 const CategorySelect = (props) => {
-  const { onChange, categories, value } = props;
+  const { onChange, categories, defaultValue } = props;
   return (
     <select
       className="CategorySelect"
       name="category"
-      value={ value }
+      defaultValue={ defaultValue }
       onChange={ onChange }>
       { categories.map(({ id, name, slug }) => (
         <option key={ id } value={ slug }>
@@ -22,7 +22,7 @@ const CategorySelect = (props) => {
 CategorySelect.propTypes = {
   categories: PropTypes.array,
   onChange: PropTypes.func,
-  value: PropTypes.string,
+  defaultValue: PropTypes.string,
 };
 
 export default CategorySelect;
