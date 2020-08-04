@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-
 import './App.css';
 
 import GoodsList from '../GoodsList/GoodsList';
@@ -8,6 +7,7 @@ import GoodsListForm from '../GoodsListForm/GoodsListForm';
 import { addNewItem, removeElementById, getTotal, getGoodsBySelected }
   from '../Utils/goodsUtils';
 import {categories} from '../Mocks/CategoriesMock';
+import __ from '../Utils/translationsUtils';
 
 export default class App extends Component {
   constructor(props) {
@@ -89,7 +89,7 @@ export default class App extends Component {
 
     return (
       <div className="Container">
-        <div className="Title">Fridge</div>
+        <div className="Title">{ __('Fridge') }</div>
         <GoodsList
           goods={ goods }
           categories={ categories }
@@ -99,12 +99,14 @@ export default class App extends Component {
           onElementUpdate={ this.onElementUpdate }
         />
         <div className="Total">
-          <div>Total:</div>
+          <div>{__('Total')}:</div>
           <div>{total}</div>
-          <div>{ selectedGoods.length > 0 && `SubTotal: ${subTotal}`}</div>
+          <div>{
+            selectedGoods.length > 0 && `${ __('SubTotal') }: ${subTotal}`
+          }</div>
         </div>
         { !!selectedGoods.length && (
-          <button onClick={ this.onDeleteSelected }>Delete Selected</button>
+          <button onClick={ this.onDeleteSelected }>{ __('Delete Selected') }</button>
         ) }
         <GoodsListForm onAdd={this.onAdd} categories={ categories } />
       </div>

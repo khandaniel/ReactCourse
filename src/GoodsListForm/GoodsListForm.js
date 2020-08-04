@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import './GoodsListForm.css';
 import PropTypes from 'prop-types';
 import CategorySelect from '../CategoriesSelect/CategorySelect';
+import __ from '../Utils/translationsUtils';
 
 export default class GoodsListForm extends Component {
   constructor(props) {
@@ -44,7 +45,7 @@ export default class GoodsListForm extends Component {
           <input
             type="text"
             className="GoodsListFormInput"
-            placeholder="Title"
+            placeholder={ __('Title') }
             name="title"
             value={title}
             onChange={this.onInputChange}
@@ -52,7 +53,7 @@ export default class GoodsListForm extends Component {
           <input
             type="number"
             className="GoodsListFormInput"
-            placeholder="Weight"
+            placeholder={ __('Weight') }
             name="weight"
             value={weight}
             onChange={this.onInputChange}
@@ -60,7 +61,7 @@ export default class GoodsListForm extends Component {
           <input
             type="text"
             className="GoodsListFormInput"
-            placeholder="Description"
+            placeholder={ __('Description') }
             name="description"
             value={description}
             onChange={this.onInputChange}
@@ -71,7 +72,7 @@ export default class GoodsListForm extends Component {
             categories={ this.props.categories }
           />
 
-          <button className="GoodsListFormButton">Add</button>
+          <button className="GoodsListFormButton">{ __('Add') }</button>
         </form>
       </div>
     );

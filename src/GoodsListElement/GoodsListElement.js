@@ -3,6 +3,7 @@ import './GoodsListElement.css';
 import PropTypes from 'prop-types';
 import CategorySelect from '../CategoriesSelect/CategorySelect';
 import { getCategory } from '../Utils/categoriesUtils';
+import __ from '../Utils/translationsUtils';
 
 export default class GoodsListElement extends Component {
   constructor(props) {
@@ -101,10 +102,10 @@ export default class GoodsListElement extends Component {
         <div className="GoodsListElement_Column GoodsListElement_Button">
           {
             ( !this.state.editing &&
-              <button onClick={this.onEdit}>Edit</button>
-            ) || <button onClick={this.onSave}>Save</button>
+              <button onClick={this.onEdit}>{ __('Edit') }</button>
+            ) || <button onClick={this.onSave}>{ __('Save') }</button>
           }
-          <button onClick={this.onDelete}>Delete</button>
+          <button onClick={this.onDelete}>{ __('Delete') }</button>
         </div>
       </div>
     );

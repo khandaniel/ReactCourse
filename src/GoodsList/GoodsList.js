@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import GoodsListElement from '../GoodsListElement/GoodsListElement';
 import PropTypes from 'prop-types';
-import {categories} from "../Mocks/CategoriesMock";
 
 export default class GoodsList extends Component {
   constructor(props) {
