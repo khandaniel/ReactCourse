@@ -1,0 +1,8 @@
+.CategorySelect {
+    display: flex;
+    margin: 5px;
+    width: 30%;
+}
+.GoodsListElement_Column .CategorySelect {
+    width: 100%;
+}

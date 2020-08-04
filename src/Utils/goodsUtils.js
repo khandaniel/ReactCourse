@@ -20,3 +20,13 @@ export const getTotal = (goods) => {
     return acc + parseFloat(item.weight);
   }, 0);
 };
+
+export const getGoodsBySelected = (goods, selectedIds, returnSelected = true) => {
+  return goods.filter((item) => {
+    if (returnSelected) {
+      return selectedIds.indexOf(item.id) >= 0;
+    } else {
+      return selectedIds.indexOf(item.id) === -1;
+    }
+  });
+};

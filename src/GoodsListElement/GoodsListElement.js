@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import './GoodsListElement.css';
 import PropTypes from 'prop-types';
+import CategorySelect from '../CategoriesSelect/CategorySelect';
+import { getCategory } from '../Utils/categoriesUtils';
 
 export default class GoodsListElement extends Component {
   constructor(props) {
@@ -11,16 +13,18 @@ export default class GoodsListElement extends Component {
       title: '',
       weight: 0,
       description: '',
+      category: '',
     };
 
     this.onEdit = (e) => {
       e.stopPropagation();
-      const { item: { title, weight, description } } = this.props;
+      const { item: { title, weight, description, category } } = this.props;
       this.setState({
         editing: true,
         title,
         weight,
         description,
+        category,
       });
     };
 
@@ -30,12 +34,14 @@ export default class GoodsListElement extends Component {
       });
     };
 
-    this.onSave = (e) => {
+    this.onSave = () => {
+      const { title, weight, description, category } = this.state;
+      const { item: { id }, onSave } = this.props;
+
       this.setState({
         editing: false,
       });
-      const { title, weight, description } = this.state;
-      this.props.onSave(this.props.item.id, { title, weight, description });
+      onSave(id, { title, weight, description, category });
     };
 
     this.onDelete = (e) => {
@@ -43,7 +49,7 @@ export default class GoodsListElement extends Component {
       this.props.onDelete(this.props.item.id);
     };
 
-    this.onToggle = (e) => {
+    this.onToggle = () => {
       if (!this.state.editing) {
         this.props.onToggle(this.props.item.id);
       }
@@ -51,7 +57,8 @@ export default class GoodsListElement extends Component {
   }
 
   render() {
-    const { item: { title, weight, description }, selected } = this.props;
+    const { item, selected, categories } = this.props;
+    const { title, weight, description, category = 'uncategorized' } = item;
     const elementClassName = selected ?
       'GoodsListElement isSelected' : 'GoodsListElement';
     const titleColumnContent = this.state.editing ?
@@ -75,6 +82,12 @@ export default class GoodsListElement extends Component {
         onChange={ this.onInputChange }
       /> :
       description;
+    const categoryColumnContent = this.state.editing ?
+      <CategorySelect
+        categories={ categories }
+        onChange={ this.onInputChange }
+      /> :
+      getCategory(category, 'slug', categories).name;
 
     return (
       <div className={ elementClassName } onClick={ this.onToggle }>
@@ -84,6 +97,7 @@ export default class GoodsListElement extends Component {
           'GoodsListElement_ColumnDescription' }>
           { descriptionColumnContent }
         </div>
+        <div className="GoodsListElement_Column">{ categoryColumnContent }</div>
         <div className="GoodsListElement_Column GoodsListElement_Button">
           {
             ( !this.state.editing &&
@@ -103,7 +117,9 @@ GoodsListElement.propTypes = {
     title: PropTypes.string,
     weight: PropTypes.string,
     description: PropTypes.string,
+    category: PropTypes.string,
   }),
+  categories: PropTypes.array,
   selected: PropTypes.bool,
   onSave: PropTypes.func,
   onDelete: PropTypes.func,

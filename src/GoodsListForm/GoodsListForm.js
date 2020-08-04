@@ -1,14 +1,19 @@
 import React, {Component} from 'react';
 import './GoodsListForm.css';
 import PropTypes from 'prop-types';
+import CategorySelect from '../CategoriesSelect/CategorySelect';
 
 export default class GoodsListForm extends Component {
   constructor(props) {
     super(props);
+    const categoryDefault = props.categories ?
+      props.categories[0].slug : 'uncategorized';
+
     this.state = {
       title: '',
       weight: '',
       description: '',
+      category: categoryDefault,
     };
 
     this.onFormSubmit = (e) => {
@@ -37,6 +42,7 @@ export default class GoodsListForm extends Component {
           onSubmit={this.onFormSubmit}
         >
           <input
+            type="text"
             className="GoodsListFormInput"
             placeholder="Title"
             name="title"
@@ -44,6 +50,7 @@ export default class GoodsListForm extends Component {
             onChange={this.onInputChange}
           />
           <input
+            type="number"
             className="GoodsListFormInput"
             placeholder="Weight"
             name="weight"
@@ -51,12 +58,19 @@ export default class GoodsListForm extends Component {
             onChange={this.onInputChange}
           />
           <input
+            type="text"
             className="GoodsListFormInput"
             placeholder="Description"
             name="description"
             value={description}
             onChange={this.onInputChange}
           />
+
+          <CategorySelect
+            onChange={ this.onInputChange }
+            categories={ this.props.categories }
+          />
+
           <button className="GoodsListFormButton">Add</button>
         </form>
       </div>
@@ -66,4 +80,5 @@ export default class GoodsListForm extends Component {
 
 GoodsListForm.propTypes = {
   onAdd: PropTypes.func,
+  categories: PropTypes.array,
 };

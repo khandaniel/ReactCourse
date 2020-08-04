@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import GoodsListElement from '../GoodsListElement/GoodsListElement';
 import PropTypes from 'prop-types';
+import {categories} from "../Mocks/CategoriesMock";
 
 export default class GoodsList extends Component {
   constructor(props) {
@@ -11,18 +12,19 @@ export default class GoodsList extends Component {
   }
 
   render() {
-    const { goods, selectedItems, onElementToggle } = this.props;
+    const { goods, categories, selectedItems, onElementToggle } = this.props;
     return (
       <div>
         {Array.isArray(goods) && goods.map( (item) => {
           const selected = selectedItems.indexOf(item.id) >= 0;
           return (
             <GoodsListElement
-              item={item}
-              key={item.id}
-              selected={selected}
+              item={ item }
+              categories={ categories }
+              key={ item.id }
+              selected={ selected }
               onSave={ this.props.onElementUpdate }
-              onDelete={this.onDelete}
+              onDelete={ this.onDelete }
               onToggle={ onElementToggle }
             />
           );
@@ -39,6 +41,7 @@ GoodsList.defaultProps = {
 
 GoodsList.propTypes = {
   goods: PropTypes.array,
+  categories: PropTypes.array,
   selectedItems: PropTypes.array,
   onDelete: PropTypes.func,
   onElementToggle: PropTypes.func,

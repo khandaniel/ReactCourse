@@ -5,7 +5,9 @@ import './App.css';
 import GoodsList from '../GoodsList/GoodsList';
 import { goods } from '../Mocks/GoodsMock';
 import GoodsListForm from '../GoodsListForm/GoodsListForm';
-import { addNewItem, removeElementById, getTotal } from '../Utils/goodsUtils';
+import { addNewItem, removeElementById, getTotal, getGoodsBySelected }
+  from '../Utils/goodsUtils';
+import {categories} from '../Mocks/CategoriesMock';
 
 export default class App extends Component {
   constructor(props) {
@@ -64,9 +66,19 @@ export default class App extends Component {
 
         return {
           goods: newGoods,
-          subTotal: getTotal(newGoods.filter((item) => {
-            return selectedGoods.indexOf(item.id) >= 0;
-          })),
+          subTotal: getTotal(getGoodsBySelected(newGoods, selectedGoods)),
+        };
+      });
+    };
+    this.onDeleteSelected = () => {
+      this.setState(({ selectedGoods, goods }) => {
+        const deselectedGoods = getGoodsBySelected(goods, selectedGoods, false);
+
+        return {
+          goods: deselectedGoods,
+          selectedGoods: [],
+          subTotal: 0,
+          total: getTotal(deselectedGoods),
         };
       });
     };
@@ -78,7 +90,9 @@ export default class App extends Component {
     return (
       <div className="Container">
         <div className="Title">Fridge</div>
-        <GoodsList goods={goods}
+        <GoodsList
+          goods={ goods }
+          categories={ categories }
           selectedItems={ selectedGoods }
           onDelete={this.onDelete}
           onElementToggle={ this.onElementToggle }
@@ -89,7 +103,10 @@ export default class App extends Component {
           <div>{total}</div>
           <div>{ selectedGoods.length > 0 && `SubTotal: ${subTotal}`}</div>
         </div>
-        <GoodsListForm onAdd={this.onAdd} />
+        { !!selectedGoods.length && (
+          <button onClick={ this.onDeleteSelected }>Delete Selected</button>
+        ) }
+        <GoodsListForm onAdd={this.onAdd} categories={ categories } />
       </div>
     );
   }
