@@ -35,7 +35,8 @@ export default class GoodsListElement extends Component {
       });
     };
 
-    this.onSave = () => {
+    this.onSave = (e) => {
+      e.stopPropagation();
       const { title, weight, description, category } = this.state;
       const { item: { id }, onSave } = this.props;
 
@@ -53,6 +54,14 @@ export default class GoodsListElement extends Component {
     this.onToggle = () => {
       if (!this.state.editing) {
         this.props.onToggle(this.props.item.id);
+      }
+    };
+
+    this.onRowAction = (e) => {
+      if (this.state.editing) {
+        this.onSave(e);
+      } else {
+        this.onEdit(e);
       }
     };
   }
@@ -101,11 +110,9 @@ export default class GoodsListElement extends Component {
         </div>
         <div className="GoodsListElement_Column">{ categoryColumnContent }</div>
         <div className="GoodsListElement_Column GoodsListElement_Button">
-          {
-            ( !this.state.editing &&
-              <button onClick={this.onEdit}>{ __('Edit') }</button>
-            ) || <button onClick={this.onSave}>{ __('Save') }</button>
-          }
+          <button onClick={this.onRowAction}>
+            { __(this.state.editing ? 'Save' : 'Edit' ) }
+          </button>
           <button onClick={this.onDelete}>{ __('Delete') }</button>
         </div>
       </div>
