@@ -21,4 +21,9 @@ module.exports = {
     'require-jsdoc': 'off',
     'object-curly-spacing': 'off',
   },
+  'settings': {
+    'react': {
+      'version': 'detect'
+    }
+  }
 };
