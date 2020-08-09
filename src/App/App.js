@@ -21,12 +21,6 @@ const App = () => {
     setTotal(getTotal(newArray));
   }, [goods]);
 
-  const onDelete = useCallback((id) => {
-    const newArray = removeElementById(id, goods);
-    setGoods(newArray);
-    setTotal(getTotal(newArray));
-  }, [goods]);
-
   const onElementToggle = useCallback((id) => {
     const idx = selectedGoods.findIndex((itemId) => itemId === id);
     const shallowSelectedGoodsCopy = [...selectedGoods];
@@ -42,6 +36,16 @@ const App = () => {
       return shallowSelectedGoodsCopy.indexOf(item.id) >= 0;
     })));
   }, [selectedGoods, goods]);
+
+  const onDelete = useCallback((id) => {
+    const newArray = removeElementById(id, goods);
+    if (selectedGoods.indexOf(id) >= 0) {
+      onElementToggle(id);
+    }
+
+    setGoods(newArray);
+    setTotal(getTotal(newArray));
+  }, [goods, selectedGoods, onElementToggle]);
 
   const onElementUpdate = useCallback((id, data = {}) => {
     const idx = goods.findIndex((item) => item.id === id);
