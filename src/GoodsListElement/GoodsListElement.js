@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './GoodsListElement.css';
 import PropTypes from 'prop-types';
-import CategorySelect from '../CategoriesSelect/CategorySelect';
+import CategorySelect from '../CategorySelect/CategorySelect';
 import { getCategory } from '../Utils/categoriesUtils';
 import __ from '../Utils/translationsUtils';
 

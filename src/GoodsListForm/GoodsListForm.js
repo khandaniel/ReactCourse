@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './GoodsListForm.css';
 import PropTypes from 'prop-types';
-import CategorySelect from '../CategoriesSelect/CategorySelect';
+import CategorySelect from '../CategorySelect/CategorySelect';
 import __ from '../Utils/translationsUtils';
 import { validateNumericInput } from '../Utils/goodsUtils';
 

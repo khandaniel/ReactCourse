@@ -4,14 +4,14 @@ import { goodsListElementTranslations }
 import { goodsListFormTranslations }
   from '../Translations/goodsListFormTranslations';
 
-const userLocale = navigator.language ?? 'en-US';
-const __ = (tag, locale = userLocale) => {
-  const translations = {
-    ...appTranslations[locale],
-    ...goodsListElementTranslations[locale],
-    ...goodsListFormTranslations[locale],
-  };
+const locale = navigator.language ?? 'en-US';
+const translations = {
+  ...appTranslations[locale],
+  ...goodsListElementTranslations[locale],
+  ...goodsListFormTranslations[locale],
+};
 
+const __ = (tag) => {
   return (translations[tag]) ? translations[tag] : tag;
 };
 
