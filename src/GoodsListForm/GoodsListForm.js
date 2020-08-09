@@ -1,97 +1,104 @@
-import React, {Component} from 'react';
+import React, { useState, useCallback } from 'react';
 import './GoodsListForm.css';
 import PropTypes from 'prop-types';
 import CategorySelect from '../CategorySelect/CategorySelect';
 import __ from '../Utils/translationsUtils';
 import { validateNumericInput } from '../Utils/goodsUtils';
 
-export default class GoodsListForm extends Component {
-  constructor(props) {
-    super(props);
-    const categoryDefault = props.categories ?
-      props.categories[0].slug : 'uncategorized';
+const GoodsListForm = (props) => {
+  const categoryDefault = props.categories ?
+    props.categories[0].slug : 'uncategorized';
 
-    this.state = {
-      title: '',
-      weight: '',
-      description: '',
-      category: categoryDefault,
-    };
+  const [title, setTitle] = useState('');
+  const [weight, setWeight] = useState('');
+  const [description, setDescription] = useState('');
+  const [category, setCategory] = useState(categoryDefault);
+  const { onAdd } = props;
 
-    this.onFormSubmit = (e) => {
-      e.preventDefault();
-      this.props.onAdd(this.state);
-      this.setState({
-        title: '',
-        weight: '',
-        description: '',
-      });
-    };
+  const onFormSubmit = useCallback((e) => {
+    e.preventDefault();
+    onAdd({ title, weight, description, category });
+    setTitle('');
+    setWeight('');
+    setDescription('');
+  }, [title, weight, description, category, onAdd]);
 
-    this.onInputChange = ({target}) => {
-      this.setState({
-        [target.name]: target.value,
-      });
-    };
+  const onInputChange = useCallback(({target}) => {
+    let setter;
+    switch (target.name) {
+      case 'title':
+        setter = setTitle;
+        break;
+      case 'description':
+        setter = setDescription;
+        break;
+      case 'category':
+        setter = setCategory;
+        break;
+      default:
+        break;
+    }
 
-    this.onWeightChange = ({ target }) => {
-      const value = target.value.replace(',', '.');
-      if (!validateNumericInput(value)) {
-        return;
-      }
+    if (typeof setter !== 'function') return;
+    setter(target.value);
+  }, []);
 
-      this.setState({
-        [target.name]: value,
-      });
-    };
-  }
+  const onWeightChange = useCallback(({ target }) => {
+    const value = target.value.replace(',', '.');
 
-  render() {
-    const {title, weight, description} = this.state;
-    return (
-      <div>
-        <form
-          className="GoodsListForm"
-          onSubmit={this.onFormSubmit}
-        >
-          <input
-            type="text"
-            className="GoodsListFormInput"
-            placeholder={ __('Title') }
-            name="title"
-            value={title}
-            onChange={this.onInputChange}
-          />
-          <input
-            type="number"
-            className="GoodsListFormInput"
-            placeholder={ __('Weight') }
-            name="weight"
-            value={weight}
-            onChange={this.onWeightChange}
-          />
-          <input
-            type="text"
-            className="GoodsListFormInput"
-            placeholder={ __('Description') }
-            name="description"
-            value={description}
-            onChange={this.onInputChange}
-          />
+    if (!validateNumericInput(value)) {
+      return;
+    }
 
-          <CategorySelect
-            onChange={ this.onInputChange }
-            categories={ this.props.categories }
-          />
+    setWeight(value);
+  }, []);
 
-          <button className="GoodsListFormButton">{ __('Add') }</button>
-        </form>
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <form
+        className="GoodsListForm"
+        onSubmit={ onFormSubmit }
+      >
+        <input
+          type="text"
+          className="GoodsListFormInput"
+          placeholder={ __('Title') }
+          name="title"
+          value={ title }
+          onChange={ onInputChange }
+        />
+        <input
+          type="number"
+          className="GoodsListFormInput"
+          placeholder={ __('Weight') }
+          name="weight"
+          value={ weight }
+          onChange={ onWeightChange }
+        />
+        <input
+          type="text"
+          className="GoodsListFormInput"
+          placeholder={ __('Description') }
+          name="description"
+          value={ description }
+          onChange={ onInputChange }
+        />
+
+        <CategorySelect
+          onChange={ onInputChange }
+          defaultValue={ category }
+          categories={ props.categories }
+        />
+
+        <button className="GoodsListFormButton">{ __('Add') }</button>
+      </form>
+    </div>
+  );
+};
 
 GoodsListForm.propTypes = {
   onAdd: PropTypes.func,
   categories: PropTypes.array,
 };
+
+export default GoodsListForm;
