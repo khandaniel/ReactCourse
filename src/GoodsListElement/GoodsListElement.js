@@ -1,124 +1,146 @@
-import React, {Component} from 'react';
+import React, { useState, useCallback } from 'react';
 import './GoodsListElement.css';
 import PropTypes from 'prop-types';
 import CategorySelect from '../CategorySelect/CategorySelect';
 import { getCategory } from '../Utils/categoriesUtils';
 import __ from '../Utils/translationsUtils';
+import { validateNumericInput } from '../Utils/goodsUtils';
 
-export default class GoodsListElement extends Component {
-  constructor(props) {
-    super(props);
+const GoodsListElement = (props) => {
+  const { item, onSave, onDelete, onToggle, selected, categories } = props;
+  const { id, title, weight, description, category = 'uncategorized' } = item;
 
-    this.state = {
-      editing: false,
-      title: '',
-      weight: 0,
-      description: '',
-      category: '',
-    };
+  const [editing, setEditing] = useState(false);
+  const [titleState, setTitle] = useState('');
+  const [weightState, setWeight] = useState(0);
+  const [descriptionState, setDescription] = useState('');
+  const [categoryState, setCategory] = useState('');
 
-    this.onEdit = (e) => {
-      e.stopPropagation();
-      const { item: { title, weight, description, category } } = this.props;
-      this.setState({
-        editing: true,
-        title,
-        weight,
-        description,
-        category,
-      });
-    };
+  const onElementEdit = useCallback((e) => {
+    e.stopPropagation();
+    setEditing(true);
+    setTitle(title);
+    setWeight(weight);
+    setDescription(description);
+    setCategory(category);
+  }, [title, weight, description, category]);
 
-    this.onInputChange = ({ target }) => {
-      this.setState({
-        [target.name]: target.value,
-      });
-    };
+  const onInputChange = useCallback(({ target }) => {
+    let setter;
+    switch (target.name) {
+      case 'title':
+        setter = setTitle;
+        break;
+      case 'description':
+        setter = setDescription;
+        break;
+      case 'category':
+        setter = setCategory;
+        break;
+      default:
+        break;
+    }
 
-    this.onSave = (e) => {
-      e.stopPropagation();
-      const { title, weight, description, category } = this.state;
-      const { item: { id }, onSave } = this.props;
+    if (typeof setter !== 'function') return;
+    setter(target.value);
+  }, []);
 
-      this.setState({
-        editing: false,
-      });
-      onSave(id, { title, weight, description, category });
-    };
+  const onWeightChange = useCallback(({ target }) => {
+    const value = target.value.replace(',', '.');
 
-    this.onDelete = (e) => {
-      e.stopPropagation();
-      this.props.onDelete(this.props.item.id);
-    };
+    if (!validateNumericInput(value)) {
+      return;
+    }
 
-    this.onToggle = () => {
-      if (!this.state.editing) {
-        this.props.onToggle(this.props.item.id);
-      }
-    };
+    setWeight(value);
+  }, []);
 
-    this.onRowAction = (e) => {
-      if (this.state.editing) {
-        this.onSave(e);
-      } else {
-        this.onEdit(e);
-      }
-    };
-  }
+  const onElementSave = useCallback((e) => {
+    e.stopPropagation();
+    setEditing(false);
+    onSave(id, {
+      title: titleState,
+      weight: weightState,
+      description: descriptionState,
+      category: categoryState,
+    });
+  }, [
+    id,
+    titleState,
+    weightState,
+    descriptionState,
+    categoryState,
+    onSave,
+  ]);
 
-  render() {
-    const { item, selected, categories } = this.props;
-    const { title, weight, description, category = 'uncategorized' } = item;
-    const elementClassName = selected ?
-      'GoodsListElement isSelected' : 'GoodsListElement';
-    const titleColumnContent = this.state.editing ?
-      <input type="text"
-        defaultValue={ title }
-        name="title"
-        onChange={ this.onInputChange }
-      /> :
-      title;
-    const weightColumnContent = this.state.editing ?
-      <input type="number"
-        defaultValue={ weight }
-        name="weight"
-        onChange={ this.onInputChange }
-      /> :
-      weight;
-    const descriptionColumnContent = this.state.editing ?
-      <input type="text"
-        defaultValue={ description }
-        name="description"
-        onChange={ this.onInputChange }
-      /> :
-      description;
-    const categoryColumnContent = this.state.editing ?
-      <CategorySelect
-        categories={ categories }
-        defaultValue={ category }
-        onChange={ this.onInputChange }
-      /> :
-      getCategory(category, 'slug', categories).name;
+  const onElementDelete = useCallback((e) => {
+    e.stopPropagation();
+    onDelete(id);
+  }, [onDelete, id]);
 
-    return (
-      <div className={ elementClassName } onClick={ this.onToggle }>
-        <div className="GoodsListElement_Column">{ titleColumnContent }</div>
-        <div className="GoodsListElement_Column">{ weightColumnContent }</div>
-        <div className={ 'GoodsListElement_Column ' +
-          'GoodsListElement_ColumnDescription' }>
-          { descriptionColumnContent }
-        </div>
-        <div className="GoodsListElement_Column">{ categoryColumnContent }</div>
-        <div className="GoodsListElement_Column GoodsListElement_Button">
-          <button onClick={this.onRowAction}>
-            { __(this.state.editing ? 'Save' : 'Edit' ) }
-          </button>
-          <button onClick={this.onDelete}>{ __('Delete') }</button>
-        </div>
+  const onElementToggle = useCallback(() => {
+    if (!editing) {
+      onToggle(id);
+    }
+  }, [editing, onToggle, id]);
+
+  const onRowAction = useCallback((e) => {
+    if (editing) {
+      onElementSave(e);
+    } else {
+      onElementEdit(e);
+    }
+  }, [editing, onElementSave, onElementEdit]);
+
+  const elementClassName = selected ?
+    'GoodsListElement isSelected' : 'GoodsListElement';
+  const titleColumnContent = editing ?
+    <input type="text"
+      defaultValue={ title }
+      name="title"
+      onChange={ onInputChange }
+    /> :
+    title;
+  const weightColumnContent = editing ?
+    <input type="number"
+      defaultValue={ weight }
+      name="weight"
+      onChange={ onWeightChange }
+    /> :
+    weight;
+  const descriptionColumnContent = editing ?
+    <input type="text"
+      defaultValue={ description }
+      name="description"
+      onChange={ onInputChange }
+    /> :
+    description;
+  const categoryColumnContent = editing ?
+    <CategorySelect
+      categories={ categories }
+      defaultValue={ category }
+      onChange={ onInputChange }
+    /> :
+    getCategory(category, 'slug', categories)?.name;
+
+  return (
+    <div className={ elementClassName } onClick={ onElementToggle }>
+      <div className="GoodsListElement_Column">{ titleColumnContent }</div>
+      <div className="GoodsListElement_Column">{ weightColumnContent }</div>
+      <div className={ 'GoodsListElement_Column ' +
+        'GoodsListElement_ColumnDescription' }>
+        { descriptionColumnContent }
       </div>
-    );
-  }
-}
+      <div className="GoodsListElement_Column">{ categoryColumnContent }</div>
+      <div className="GoodsListElement_Column GoodsListElement_Button">
+        <button onClick={ onRowAction }>
+          { __(editing ? 'Save' : 'Edit' ) }
+        </button>
+        <button onClick={ onElementDelete }>{ __('Delete') }</button>
+      </div>
+    </div>
+  );
+};
 
 GoodsListElement.propTypes = {
   item: PropTypes.shape({
@@ -134,3 +156,5 @@ GoodsListElement.propTypes = {
   onDelete: PropTypes.func,
   onToggle: PropTypes.func,
 };
+
+export default GoodsListElement;
