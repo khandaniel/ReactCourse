@@ -1,27 +1,28 @@
 import React, { useState, useCallback } from 'react';
+import { connect } from 'react-redux';
 import './GoodsListForm.css';
 import PropTypes from 'prop-types';
 import CategorySelect from '../CategorySelect/CategorySelect';
 import __ from '../Utils/translationsUtils';
 import { validateNumericInput } from '../Utils/goodsUtils';
+import { addItem } from '../Store/Actions/goodsListFormActions';
 
 const GoodsListForm = (props) => {
-  const categoryDefault = props.categories ?
-    props.categories[0].slug : 'uncategorized';
+  const categoryDefault = props.defaultCategory;
 
   const [title, setTitle] = useState('');
   const [weight, setWeight] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState(categoryDefault);
-  const { onAdd } = props;
+  const { addItem } = props;
 
   const onFormSubmit = useCallback((e) => {
     e.preventDefault();
-    onAdd({ title, weight, description, category });
+    addItem({ title, weight, description, category });
     setTitle('');
     setWeight('');
     setDescription('');
-  }, [title, weight, description, category, onAdd]);
+  }, [title, weight, description, category, addItem]);
 
   const onInputChange = useCallback(({target}) => {
     let setter;
@@ -97,8 +98,9 @@ const GoodsListForm = (props) => {
 };
 
 GoodsListForm.propTypes = {
-  onAdd: PropTypes.func,
+  addItem: PropTypes.func,
   categories: PropTypes.array,
+  defaultCategory: PropTypes.string,
 };
 
-export default GoodsListForm;
+export default connect(null, { addItem })(GoodsListForm);

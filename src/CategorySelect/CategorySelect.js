@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import './CategorySelect.css';
 
@@ -25,4 +26,8 @@ CategorySelect.propTypes = {
   defaultValue: PropTypes.string,
 };
 
-export default CategorySelect;
+const mapStateToProps = ({ categories, defaultCategory }) => {
+  return { categories, defaultCategory };
+};
+
+export default connect(mapStateToProps)(CategorySelect);

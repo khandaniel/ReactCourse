@@ -1,9 +1,10 @@
 import React from 'react';
-import GoodsListElement from '../GoodsListElement/GoodsListElement';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import GoodsListElement from '../GoodsListElement/GoodsListElement';
 
 const GoodsList = (props) => {
-  const { goods, categories, selectedItems, onElementToggle, onDelete } = props;
+  const { goods, selectedItems } = props;
   return (
     <div>
       { goods.map((item) => {
@@ -11,12 +12,8 @@ const GoodsList = (props) => {
         return (
           <GoodsListElement
             item={ item }
-            categories={ categories }
             key={ item.id }
             selected={ selected }
-            onSave={ props.onElementUpdate }
-            onDelete={ onDelete }
-            onToggle={ onElementToggle }
           />
         );
       }) }
@@ -31,11 +28,14 @@ GoodsList.defaultProps = {
 
 GoodsList.propTypes = {
   goods: PropTypes.array,
-  categories: PropTypes.array,
   selectedItems: PropTypes.array,
-  onDelete: PropTypes.func,
-  onElementToggle: PropTypes.func,
-  onElementUpdate: PropTypes.func,
 };
 
-export default GoodsList;
+const mapStateToProps = ({ goods, selectedItems }) => {
+  return {
+    goods,
+    selectedItems,
+  };
+};
+
+export default connect(mapStateToProps)(GoodsList);

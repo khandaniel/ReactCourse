@@ -1,29 +1,29 @@
 import React, { useState, useCallback } from 'react';
-import './GoodsListElement.css';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import CategorySelect from '../CategorySelect/CategorySelect';
 import { getCategory } from '../Utils/categoriesUtils';
 import __ from '../Utils/translationsUtils';
 import { validateNumericInput } from '../Utils/goodsUtils';
+import * as actions from '../Store/Actions/goodsListElementActions';
+import './GoodsListElement.css';
 
 const GoodsListElement = (props) => {
-  const { item, onSave, onDelete, onToggle, selected, categories } = props;
+  const { item, updateItem, deleteItem, setItemSelected, unsetItemSelected,
+    selected, categories } = props;
   const { id, title, weight, description, category = 'uncategorized' } = item;
-
   const [editing, setEditing] = useState(false);
-  const [titleState, setTitle] = useState('');
-  const [weightState, setWeight] = useState(0);
-  const [descriptionState, setDescription] = useState('');
-  const [categoryState, setCategory] = useState('');
+  const [titleState, setTitle] = useState(title);
+  const [weightState, setWeight] = useState(weight);
+  const [descriptionState, setDescription] = useState(description);
+  const [categoryState, setCategory] = useState(category);
+
+  const toggleFunc = selected ? unsetItemSelected : setItemSelected;
 
   const onElementEdit = useCallback((e) => {
     e.stopPropagation();
     setEditing(true);
-    setTitle(title);
-    setWeight(weight);
-    setDescription(description);
-    setCategory(category);
-  }, [title, weight, description, category]);
+  }, []);
 
   const onInputChange = useCallback(({ target }) => {
     let setter;
@@ -58,7 +58,7 @@ const GoodsListElement = (props) => {
   const onElementSave = useCallback((e) => {
     e.stopPropagation();
     setEditing(false);
-    onSave(id, {
+    updateItem(id, {
       title: titleState,
       weight: weightState,
       description: descriptionState,
@@ -70,19 +70,19 @@ const GoodsListElement = (props) => {
     weightState,
     descriptionState,
     categoryState,
-    onSave,
+    updateItem,
   ]);
 
   const onElementDelete = useCallback((e) => {
     e.stopPropagation();
-    onDelete(id);
-  }, [onDelete, id]);
+    deleteItem(id);
+  }, [deleteItem, id]);
 
   const onElementToggle = useCallback(() => {
     if (!editing) {
-      onToggle(id);
+      toggleFunc(id);
     }
-  }, [editing, onToggle, id]);
+  }, [editing, toggleFunc, id]);
 
   const onRowAction = useCallback((e) => {
     if (editing) {
@@ -152,9 +152,10 @@ GoodsListElement.propTypes = {
   }),
   categories: PropTypes.array,
   selected: PropTypes.bool,
-  onSave: PropTypes.func,
-  onDelete: PropTypes.func,
-  onToggle: PropTypes.func,
+  updateItem: PropTypes.func,
+  deleteItem: PropTypes.func,
+  setItemSelected: PropTypes.func,
+  unsetItemSelected: PropTypes.func,
 };
 
-export default GoodsListElement;
+export default connect(null, actions)(GoodsListElement);
