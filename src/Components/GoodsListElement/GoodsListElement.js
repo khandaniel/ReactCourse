@@ -2,10 +2,10 @@ import React, { useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import CategorySelect from '../CategorySelect/CategorySelect';
-import { getCategory } from '../Utils/categoriesUtils';
-import __ from '../Utils/translationsUtils';
-import { validateNumericInput } from '../Utils/goodsUtils';
-import * as actions from '../Store/Actions/goodsListElementActions';
+import { getCategory } from '../../Utils/categoriesUtils';
+import __ from '../../Utils/translationsUtils';
+import { validateNumericInput } from '../../Utils/goodsUtils';
+import * as actions from '../../Store/Actions/goodsListElementActions';
 import './GoodsListElement.css';
 
 const GoodsListElement = (props) => {

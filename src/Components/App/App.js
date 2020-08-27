@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 
 import GoodsList from '../GoodsList/GoodsList';
 import GoodsListForm from '../GoodsListForm/GoodsListForm';
-import __ from '../Utils/translationsUtils';
-import { deleteSelected } from '../Store/Actions/goodsListElementActions';
+import __ from '../../Utils/translationsUtils';
+import { deleteSelected } from '../../Store/Actions/goodsListElementActions';
 
 import './App.css';
 

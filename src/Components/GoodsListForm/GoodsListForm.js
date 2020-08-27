@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import './GoodsListForm.css';
 import PropTypes from 'prop-types';
 import CategorySelect from '../CategorySelect/CategorySelect';
-import __ from '../Utils/translationsUtils';
-import { validateNumericInput } from '../Utils/goodsUtils';
-import { addItem } from '../Store/Actions/goodsListFormActions';
+import __ from '../../Utils/translationsUtils';
+import { validateNumericInput } from '../../Utils/goodsUtils';
+import { addItem } from '../../Store/Actions/goodsListFormActions';
 
 const GoodsListForm = (props) => {
   const categoryDefault = props.defaultCategory;
